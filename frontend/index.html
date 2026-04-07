@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>eHotels</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <section class="hero">
+    <header class="topbar">
+      <div class="brand-wrap">
+        <p class="brand">eHotels</p>
+        <nav class="top-nav">
+          <a id="nav-search" href="#search-panel">Search</a>
+          <a id="nav-results" href="#results-panel">Results</a>
+          <a id="nav-operations" href="#employee-panel">Operations</a>
+          <a id="nav-manage" href="#management">Manage Data</a>
+          <a id="nav-views" href="#views">Views</a>
+        </nav>
+      </div>
+      <div class="role-switch" role="group" aria-label="User Role">
+        <label><input type="radio" name="role" value="customer" checked /> Customer</label>
+        <label><input type="radio" name="role" value="employee" /> Employee</label>
+      </div>
+    </header>
+
+    <div class="hero-content">
+      <div class="hero-text">
+        <h1>Book Rooms Across Premium Hotel Chains</h1>
+        <p>Live room availability, instant bookings, and seamless check-in workflows for customers and hotel teams.</p>
+      </div>
+    </div>
+  </section>
+
+  <main class="layout">
+    <section class="card" id="search-panel">
+      <h2>Search for a Hotel Room</h2>
+      <p class="section-help">Choose your filters first. You’ll be taken to the results page to refine and book.</p>
+
+      <form id="search-rooms-form" class="hero-search-form search-page-form">
+        <label>
+          <span class="input-title">Area</span>
+          <input name="area" type="text" placeholder="City, province, or country" />
+        </label>
+        <label>
+          <span class="input-title">Check-in</span>
+          <input name="start_date" type="date" required />
+        </label>
+        <label>
+          <span class="input-title">Check-out</span>
+          <input name="end_date" type="date" required />
+        </label>
+        <label>
+          <span class="input-title">Capacity</span>
+          <select name="capacity_type">
+            <option value="">Any</option>
+            <option value="SINGLE">Single</option>
+            <option value="DOUBLE">Double</option>
+            <option value="TRIPLE">Triple</option>
+            <option value="SUITE">Suite</option>
+          </select>
+        </label>
+        <label>
+          <span class="input-title">Hotel Chain</span>
+          <select name="chain_id" id="search-chain-id">
+            <option value="">Any</option>
+          </select>
+        </label>
+        <label>
+          <span class="input-title">Category</span>
+          <select name="category_stars">
+            <option value="">Any</option>
+            <option value="1">1 Star</option>
+            <option value="2">2 Stars</option>
+            <option value="3">3 Stars</option>
+            <option value="4">4 Stars</option>
+            <option value="5">5 Stars</option>
+          </select>
+        </label>
+        <label>
+          <span class="input-title">Min Price</span>
+          <input name="min_price" type="number" min="0" step="0.01" placeholder="Any" />
+        </label>
+        <label>
+          <span class="input-title">Max Price</span>
+          <input name="max_price" type="number" min="0" step="0.01" placeholder="Any" />
+        </label>
+        <button type="submit" class="hero-search-btn">Search Hotels</button>
+      </form>
+    </section>
+
+    <section class="card hidden" id="results-panel">
+      <div class="results-header">
+        <div>
+          <h2>Matching Hotels</h2>
+          <p class="section-help">Refine the results here and then book a room from the list.</p>
+        </div>
+        <button type="button" id="back-to-search">Back to Search</button>
+      </div>
+
+      <div class="table-wrap">
+        <table id="available-rooms-table">
+          <thead>
+            <tr>
+              <th>Room ID</th>
+              <th>Chain</th>
+              <th>Hotel</th>
+              <th>Area</th>
+              <th>Category</th>
+              <th>Total Rooms</th>
+              <th>Capacity</th>
+              <th>Price/Night</th>
+              <th>Select</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+      <div id="rooms-pagination" class="pagination hidden">
+        <button type="button" id="prev-rooms-page">Previous</button>
+        <span id="rooms-page-info"></span>
+        <button type="button" id="next-rooms-page">Next</button>
+      </div>
+
+      <div id="no-results-message" class="no-results hidden">There are no rooms with the specified filters.</div>
+
+      <div id="booking-prompt" class="booking-prompt">Choose a hotel room from the list to continue with booking.</div>
+
+      <form id="booking-form" class="grid-form hidden">
+        <h3>Complete Booking</h3>
+        <label>Customer ID<input name="customer_id" type="number" required /></label>
+        <label>Room ID<input name="room_id" type="number" required /></label>
+        <label>Start Date<input name="start_date" type="date" required /></label>
+        <label>End Date<input name="end_date" type="date" required /></label>
+        <div class="actions-row"><button type="submit">Book Room</button></div>
+      </form>
+    </section>
+
+    <section class="card hidden" id="employee-panel">
+      <h2>Employee Actions</h2>
+
+      <form id="convert-booking-form" class="grid-form">
+        <h3>Convert Booking to Renting (Check-in)</h3>
+        <label>Booking ID<input name="booking_id" type="number" required /></label>
+        <label>Customer ID<input name="customer_id" type="number" required /></label>
+        <label>Room ID<input name="room_id" type="number" required /></label>
+        <label>Employee ID<input name="employee_id" type="number" required /></label>
+        <label>Start Date<input name="start_date" type="date" required /></label>
+        <label>End Date<input name="end_date" type="date" required /></label>
+        <div class="actions-row"><button type="submit">Convert to Renting</button></div>
+      </form>
+
+      <form id="direct-renting-form" class="grid-form">
+        <h3>Direct Renting (No Prior Booking)</h3>
+        <label>Customer ID<input name="customer_id" type="number" required /></label>
+        <label>Room ID<input name="room_id" type="number" required /></label>
+        <label>Employee ID<input name="employee_id" type="number" required /></label>
+        <label>Start Date<input name="start_date" type="date" required /></label>
+        <label>End Date<input name="end_date" type="date" required /></label>
+        <div class="actions-row"><button type="submit">Create Renting</button></div>
+      </form>
+
+      <form id="payment-form" class="grid-form">
+        <h3>Insert Payment for Renting</h3>
+        <label>Renting ID<input name="renting_id" type="number" required /></label>
+        <label>Amount<input name="amount" type="number" min="0" step="0.01" required /></label>
+        <label>Method
+          <select name="payment_method" required>
+            <option value="">Select</option>
+            <option value="CARD">Card</option>
+            <option value="CASH">Cash</option>
+            <option value="TRANSFER">Transfer</option>
+          </select>
+        </label>
+        <label>Payment Date<input name="payment_date" type="date" required /></label>
+        <div class="actions-row"><button type="submit">Submit Payment</button></div>
+      </form>
+    </section>
+
+    <section class="card hidden" id="management">
+      <h2>Data Management (Insert / Update / Delete)</h2>
+
+      <details open>
+        <summary>Customers</summary>
+        <form id="customer-crud-form" class="grid-form">
+          <input type="hidden" name="entity" value="customer" />
+          <label>Customer ID (for update/delete)<input name="customer_id" type="number" /></label>
+          <label>Full Name<input name="full_name" type="text" /></label>
+          <label>Street<input name="street" type="text" /></label>
+          <label>City<input name="city" type="text" /></label>
+          <label>State/Province<input name="state_province" type="text" /></label>
+          <label>Postal Code<input name="postal_code" type="text" /></label>
+          <label>Country<input name="country" type="text" /></label>
+          <label>ID Type
+            <select name="id_type">
+              <option value="">Select</option>
+              <option value="SSN">SSN</option>
+              <option value="SIN">SIN</option>
+              <option value="DRIVING_LICENSE">Driving License</option>
+              <option value="PASSPORT">Passport</option>
+            </select>
+          </label>
+          <label>ID Value<input name="id_value" type="text" /></label>
+          <label>Registration Date<input name="registration_date" type="date" /></label>
+          <div class="actions-row">
+            <button type="button" data-op="create">Insert</button>
+            <button type="button" data-op="update">Update</button>
+            <button type="button" data-op="delete" class="danger">Delete</button>
+          </div>
+        </form>
+      </details>
+
+      <details>
+        <summary>Employees</summary>
+        <form id="employee-crud-form" class="grid-form">
+          <input type="hidden" name="entity" value="employee" />
+          <label>Employee ID (for update/delete)<input name="employee_id" type="number" /></label>
+          <label>Full Name<input name="full_name" type="text" /></label>
+          <label>Street<input name="street" type="text" /></label>
+          <label>City<input name="city" type="text" /></label>
+          <label>State/Province<input name="state_province" type="text" /></label>
+          <label>Postal Code<input name="postal_code" type="text" /></label>
+          <label>Country<input name="country" type="text" /></label>
+          <label>Hotel ID<input name="hotel_id" type="number" /></label>
+          <label>SSN/SIN<input name="ssn_sin" type="text" /></label>
+          <div class="actions-row">
+            <button type="button" data-op="create">Insert</button>
+            <button type="button" data-op="update">Update</button>
+            <button type="button" data-op="delete" class="danger">Delete</button>
+          </div>
+        </form>
+      </details>
+
+      <details>
+        <summary>Hotels</summary>
+        <form id="hotel-crud-form" class="grid-form">
+          <input type="hidden" name="entity" value="hotel" />
+          <label>Hotel ID (for update/delete)<input name="hotel_id" type="number" /></label>
+          <label>Chain ID<input name="chain_id" type="number" /></label>
+          <label>Hotel Name<input name="hotel_name" type="text" /></label>
+          <label>Street<input name="hotel_street" type="text" /></label>
+          <label>City<input name="hotel_city" type="text" /></label>
+          <label>State/Province<input name="hotel_state_province" type="text" /></label>
+          <label>Postal Code<input name="hotel_postal_code" type="text" /></label>
+          <label>Country<input name="hotel_country" type="text" /></label>
+          <label>Category Stars<input name="category_stars" type="number" min="1" max="5" /></label>
+          <label>Number of Rooms<input name="number_of_rooms" type="number" min="0" /></label>
+          <div class="actions-row">
+            <button type="button" data-op="create">Insert</button>
+            <button type="button" data-op="update">Update</button>
+            <button type="button" data-op="delete" class="danger">Delete</button>
+          </div>
+        </form>
+      </details>
+
+      <details>
+        <summary>Rooms</summary>
+        <form id="room-crud-form" class="grid-form">
+          <input type="hidden" name="entity" value="room" />
+          <label>Room ID (for update/delete)<input name="room_id" type="number" /></label>
+          <label>Hotel ID<input name="hotel_id" type="number" /></label>
+          <label>Room Number<input name="room_number" type="text" /></label>
+          <label>Price Per Night<input name="price_per_night" type="number" min="0" step="0.01" /></label>
+          <label>Capacity
+            <select name="capacity_type">
+              <option value="">Select</option>
+              <option value="SINGLE">Single</option>
+              <option value="DOUBLE">Double</option>
+              <option value="TRIPLE">Triple</option>
+              <option value="SUITE">Suite</option>
+            </select>
+          </label>
+          <label>View
+            <select name="view_type">
+              <option value="">Select</option>
+              <option value="SEA">Sea</option>
+              <option value="MOUNTAIN">Mountain</option>
+              <option value="NONE">None</option>
+            </select>
+          </label>
+          <label>Extendable
+            <select name="is_extendable">
+              <option value="">Select</option>
+              <option value="true">True</option>
+              <option value="false">False</option>
+            </select>
+          </label>
+          <div class="actions-row">
+            <button type="button" data-op="create">Insert</button>
+            <button type="button" data-op="update">Update</button>
+            <button type="button" data-op="delete" class="danger">Delete</button>
+          </div>
+        </form>
+      </details>
+    </section>
+
+    <section class="card" id="views">
+      <h2>SQL Views</h2>
+      <div class="actions-row">
+        <button id="load-view-1">Load Available Rooms Per Area</button>
+        <button id="load-view-2">Load Hotel Aggregated Capacity</button>
+      </div>
+      <div class="table-wrap">
+        <table id="views-table">
+          <thead></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Status</h2>
+      <pre id="status-box">Ready.</pre>
+    </section>
+  </main>
+
+  <script src="./app.js" type="module"></script>
+</body>
+</html>
