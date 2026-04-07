@@ -366,8 +366,9 @@ function initCustomerActions() {
     payload.status = "ACTIVE";
 
     try {
-      await apiRequest("/bookings", { method: "POST", body: JSON.stringify(payload) });
-      setStatus("Booking created.");
+      const result = await apiRequest("/bookings", { method: "POST", body: JSON.stringify(payload) });
+      const bookingId = result?.booking_id;
+      setStatus(bookingId ? `Booking created. Booking ID: ${bookingId}` : "Booking created.");
       bookingForm.reset();
     } catch (error) {
       setStatus(error.message, true);
